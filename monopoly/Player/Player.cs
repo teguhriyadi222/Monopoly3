@@ -10,24 +10,24 @@ namespace monopoly
 
     public class Player : IPlayer
     {
-        private int id;
-        private string name;
+        private int _id;
+        private string _name;
         private static int nextID = 1;
 
         public Player(string name)
         {
-            this.id = nextID++;
-            this.name = name;
+            _id = nextID++;
+            _name = name;
         }
 
         public int GetID()
         {
-            return id;
+            return _id;
         }
 
         public string GetName()
         {
-            return name;
+            return _name;
         }
     }
 }

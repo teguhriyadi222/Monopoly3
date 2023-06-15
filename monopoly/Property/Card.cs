@@ -15,48 +15,51 @@ namespace monopoly
 
     public class Card : Square
     {
-        private string description;
-        private TypeCard type;
-        private Action<Player, int> Command { get; set; }
-        private TypeCardCommand typeCommand;
-        private int valueCard;
+        private string _description;
+        private TypeCard _type;
+        private Action<Player, int> _Command { get; set; }
+        private TypeCardCommand _typeCommand;
+        private int _valueCard;
 
 
         public Card(int position, string name, string description, TypeCard type, int valueCard, TypeCardCommand typeComman)
             : base(position, name, description)
         {
-            this.description = description;
-            this.type = type;
-            this.valueCard = valueCard;
-            this.typeCommand = typeCommand;
+            _description = description;
+            _type = type;
+            _valueCard = valueCard;
+            _typeCommand = _typeCommand;
         }
 
         public string GetDescription()
         {
-            return description;
+            return _description;
         }
 
         public TypeCard GetCardType()
         {
-            return type;
+            return _type;
+        }
+
+        public TypeCardCommand GetTypeCommand()
+        {
+            return _typeCommand;
         }
 
         public int GetValue()
         {
-            return valueCard;
+            return _valueCard;
         }
 
         public void SetCommand(Action<Player, int> command, TypeCardCommand typeCommand)
         {
-            Command = command;
-            this.typeCommand = typeCommand;
+            _Command = command;
+            _typeCommand = typeCommand;
         }
-
-        
 
         public void ExecuteCommand(Player player)
         {
-            Command?.Invoke(player, valueCard);
+            _Command?.Invoke(player, _valueCard);
         }
     }
 }

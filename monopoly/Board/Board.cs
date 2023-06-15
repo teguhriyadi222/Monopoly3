@@ -11,21 +11,21 @@ namespace monopoly
 
     public class Board : IBoard
     {
-        private List<Square> squares;
+        private List<Square> _squares;
 
         public Board()
         {
-            squares = new List<Square>();
+            _squares = new List<Square>();
         }
 
         public void AddSquare(Square square)
         {
-            squares.Add(square);
+            _squares.Add(square);
         }
 
         public Square GetSquare(int position)
         {
-            foreach (Square square in squares)
+            foreach (Square square in _squares)
             {
                 if (square.GetPosition() == position)
                 {
@@ -36,7 +36,7 @@ namespace monopoly
         }
         public int GetSquaresCount()
         {
-            return squares.Count;
+            return _squares.Count;
         }
     }
 }

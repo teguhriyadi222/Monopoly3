@@ -4,17 +4,17 @@ namespace monopoly
 
     public class Tax : Square
     {
-        private int taxAmount;
+        private int _taxAmount;
 
         public Tax(int position, string name, string description, int taxAmount)
             : base(position, name, description)
         {
-            this.taxAmount = taxAmount;
+            _taxAmount = taxAmount;
         }
 
         public int GetTaxAmount()
         {
-            return taxAmount;
+            return _taxAmount;
         }
     }
 

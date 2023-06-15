@@ -2,30 +2,30 @@ namespace monopoly
 {
     public abstract class Square
     {
-        private int position;
-        private string name;
-        private string description;
+        private int _position;
+        private string _name;
+        private string _description;
 
         public Square(int position, string name, string description)
         {
-            this.position = position;
-            this.name = name;
-            this.description = description;
+            _position = position;
+            _name = name;
+            _description = description;
         }
 
         public int GetPosition()
         {
-            return position;
+            return _position;
         }
 
         public string GetName()
         {
-            return name;
+            return _name;
         }
 
         public string GetDescription()
         {
-            return description;
+            return _description;
         }
     }
 }

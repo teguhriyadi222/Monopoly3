@@ -4,16 +4,16 @@ namespace monopoly
 {
     public class Dice : IDice 
     {
-        private Random random;
+        private Random _random;
 
         public Dice() 
         {
-            random = new Random();
+            _random = new Random();
         }
 
         public int Roll() 
         {
-            return random.Next(1, 7);
+            return _random.Next(1, 7);
         }
     }
 }
