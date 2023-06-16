@@ -15,6 +15,7 @@ namespace monopoly
         private Dictionary<Player, int> _playerMoney;
         private Dictionary<Player, bool> _jailStatus;
         private Random _random;
+        public event Action<Player> GoToJailEvent;
 
 
         public GameController(List<Player> players, IBoard board, Jail jail, List<Card> chanceCards, List<Card> communityChestCards, IDice dice)
@@ -46,6 +47,16 @@ namespace monopoly
             _board = board;
         }
 
+        public void SetInitialPlayerPositions()
+        {
+            Square startSquare = new Start(0, "Start", "Starting point of the board");
+
+            foreach (Player player in _players)
+            {
+                _playerPositions[player] = startSquare;
+            }
+        }
+
         public (int dice1Result, int dice2Result, int totalResult) RollDice()
         {
             int dice1Result = _dice.Roll();
@@ -71,10 +82,10 @@ namespace monopoly
             {
                 return _playerMoney[player];
             }
-            return 0; 
+            return 0;
         }
 
-        private int GetCurrentPlayerIndex()
+        public int GetCurrentPlayerIndex()
         {
             if (_currentPlayer < 0 || _currentPlayer >= _players.Count)
             {
@@ -89,15 +100,6 @@ namespace monopoly
             _currentPlayer = (_currentPlayer + 1) % _players.Count;
         }
 
-        public void SetInitialPlayerPositions()
-        {
-            Square startSquare = new Start(0, "Start", "Starting point of the board");
-
-            foreach (Player player in _players)
-            {
-                _playerPositions[player] = startSquare;
-            }
-        }
 
         public int GetPlayerPosition(Player player)
         {
@@ -153,9 +155,14 @@ namespace monopoly
             {
                 HandlePassGoAction(player);
             }
-            else if (square is Card card);
+            else if (square is Card card)
             {
-               
+                ExecuteCommand(player, card);
+
+            }
+            else if (square is GoToJail jail)
+            {
+                GoToJail(player, jail);
             }
         }
 
@@ -166,7 +173,7 @@ namespace monopoly
 
             if (propertyOwnerName != null && propertyOwnerName != currentPlayerName)
             {
-                
+
                 int rentAmount = property.GetRent();
 
                 if (_playerMoney.ContainsKey(player))
@@ -190,12 +197,11 @@ namespace monopoly
 
         public void HandlePassGoAction(Player player)
         {
-            // Jika pemain melewati awal papan, tambahkan uang sejumlah gaji yang diterima
             int salaryAmount = 200;
-            Player currentPlayer = GetPlayerByName(player.GetName()); // Dapatkan objek Player berdasarkan nama
+            Player currentPlayer = GetPlayerByName(player.GetName());
             if (_playerMoney.ContainsKey(currentPlayer))
             {
-                _playerMoney[currentPlayer] += salaryAmount; // Tambahkan uang langsung ke dictionary playerMoney
+                _playerMoney[currentPlayer] += salaryAmount;
             }
 
         }
@@ -277,7 +283,7 @@ namespace monopoly
 
                     if (_playerMoney.ContainsKey(player) && _playerMoney[player] >= propertyPrice)
                     {
-                        _playerMoney[player] -= propertyPrice; 
+                        _playerMoney[player] -= propertyPrice;
                         properties.Add(property);
                         property.SetOwner(player.GetName());
                     }
@@ -291,19 +297,22 @@ namespace monopoly
 
             if (_playerMoney.ContainsKey(player))
             {
-                _playerMoney[player] -= taxAmount; // Kurangi uang langsung dari dictionary playerMoney
+                _playerMoney[player] -= taxAmount;
             }
         }
 
 
         public void GoToJail(Player player, GoToJail goToJail)
         {
-            // Dapatkan objek Jail dari GameController
             Jail jail = GetJail();
-
-            // Pindahkan pemain ke petak penjara
             SetPlayerPosition(player, jail);
             _jailStatus[player] = true;
+            OnGoToJail(player);
+        }
+
+        public void OnGoToJail(Player player)
+        {
+            GoToJailEvent?.Invoke(player);
         }
 
         public Jail GetJail()
@@ -326,7 +335,7 @@ namespace monopoly
             {
                 return _jailStatus[player];
             }
-            return false; // Jika pemain tidak ditemukan dalam kamus, anggap mereka tidak berada di penjara
+            return false;
         }
 
         public void ReleaseFromJail(Player player)
@@ -334,42 +343,29 @@ namespace monopoly
             Jail jail = GetJail();
             if (_playerPositions[player] == jail)
             {
-                (int dice1Result, int dice2Result, int totalResult) = RollDice();
+                int escapeAttempts = 0;
 
-                if (dice1Result == dice2Result)
+                while (escapeAttempts < 3)
                 {
-                    Move(player, totalResult);
-                    _jailStatus[player] = false;
-                }
-                else
-                {
-                  
-                    int remainingJailAttempts = GetRemainingJailAttempts(player);
+                    (int dice1Result, int dice2Result, int totalResult) = RollDice();
 
-                    if (remainingJailAttempts == 0)
+                    if (dice1Result == dice2Result)
                     {
-                        int fineAmount = jail.GetBailAmount();
-
-                        if (_playerMoney.ContainsKey(player))
-                        {
-                            _playerMoney[player] -= fineAmount; // Kurangi uang langsung dari dictionary playerMoney
-                        }
-
+                        Move(player, totalResult);
                         _jailStatus[player] = false;
+                        break;
                     }
+
+                    escapeAttempts++;
+                }
+
+                if (escapeAttempts == 3)
+                {
+
                 }
             }
         }
 
-
-        private int GetRemainingJailAttempts(Player player)
-        {
-            int maxJailAttempts = 3;
-            int usedJailAttempts = maxJailAttempts - _playerMoney[player] / _jail.GetBailAmount();
-            int remainingJailAttempts = maxJailAttempts - usedJailAttempts;
-
-            return remainingJailAttempts;
-        }
 
         public bool IsPlayerBankrupt(Player player)
         {
@@ -379,11 +375,11 @@ namespace monopoly
                 List<Property> playerProperties = GetPlayerProperties(player);
                 if (playerMoneyAmount <= 0 && (playerProperties == null || playerProperties.Count == 0))
                 {
-                    return true; 
+                    return true;
                 }
             }
 
-            return false;  
+            return false;
         }
 
         public bool BuyHouse(Player player, Property property)
@@ -399,7 +395,7 @@ namespace monopoly
             }
 
             int housePrice = property.GetHousePrice();
-            int maxHouses = 4; 
+            int maxHouses = 4;
 
             if (property.GetNumberOfHouses() >= maxHouses)
             {
@@ -446,17 +442,6 @@ namespace monopoly
             }
         }
 
-        public void AddChanceCard(Card card)
-        {
-            int randomIndex = new Random().Next(0, _chanceCards.Count + 1);
-            _chanceCards.Add(card);
-        }
-
-        public void AddCommunityChestCard(Card card)
-        {
-            int randomIndex = new Random().Next(0, _communityChestCards.Count + 1);
-            _communityChestCards.Add(card);
-        }
 
         public void ExecuteCommand(Player player, Card card)
         {
@@ -464,45 +449,62 @@ namespace monopoly
             int valueCard = card.GetValue();
             switch (typeCardCommand)
             {
-                case TypeCardCommand.Move :
-                Move(player, valueCard);  
-                break;
+                case TypeCardCommand.Move:
+                    Move(player, valueCard);
+                    break;
                 case TypeCardCommand.PayTax:
-                _playerMoney[player] -= valueCard;
-                break;
+                    _playerMoney[player] -= valueCard;
+                    break;
                 case TypeCardCommand.ReceiveMoney:
-                _playerMoney[player] += valueCard;
-                break;
+                    _playerMoney[player] += valueCard;
+                    break;
             }
 
         }
 
+        public void AddCard(Card card)
+        {
+            if (card.GetCardType() == TypeCard.Chance)
+            {
+                if (_chanceCards == null)
+                    _chanceCards = new List<Card>();
+
+                _chanceCards.Add(card);
+            }
+            else if (card.GetCardType() == TypeCard.CommunityChest)
+            {
+                if (_communityChestCards == null)
+                    _communityChestCards = new List<Card>();
+
+                _communityChestCards.Add(card);
+            }
+        }
+
+        public void DrawRandomCard(Player player, TypeCard cardType)
+        {
+            List<Card> cardList;
+
+            if (cardType == TypeCard.Chance)
+            {
+                cardList = _chanceCards;
+            }
+            else if (cardType == TypeCard.CommunityChest)
+            {
+                cardList = _communityChestCards;
+            }
+            else
+            {
+                return;
+            }
+
+            Random random = new Random();
+            int index = random.Next(0, cardList.Count);
+            Card card = cardList[index];
+
+            ExecuteCommand(player, card);
+        }
 
 
-
-
-        // public void ExecuteCommand(Player player, Card card)
-        // {
-        //     TypeCardCommand typeCommand = card.GetCardType();
-        //     switch (typeCommand)
-        //     {
-        //         case TypeCardCommand.Move:
-        //             int valueCard = card.GetValue();
-        //             player.Move(valueCard);
-        //             break;
-        //         case TypeCardCommand.PayTax:
-        //             valueCard = card.GetValue();
-        //             player.PayTax(valueCard);
-        //             break;
-        //         case TypeCardCommand.ReceiveMoney:
-        //             valueCard = card.GetValue();
-        //             player.ReceiveMoney(valueCard);
-        //             break;
-        //         default:
-        //             // Handle unrecognized command type
-        //             break;
-        //     }
-        // }
 
         public void StartGame()
         {

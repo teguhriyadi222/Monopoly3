@@ -17,7 +17,6 @@ namespace monopoly
     {
         private string _description;
         private TypeCard _type;
-        private Action<Player, int> _Command { get; set; }
         private TypeCardCommand _typeCommand;
         private int _valueCard;
 
@@ -50,16 +49,6 @@ namespace monopoly
         {
             return _valueCard;
         }
-
-        public void SetCommand(Action<Player, int> command, TypeCardCommand typeCommand)
-        {
-            _Command = command;
-            _typeCommand = typeCommand;
-        }
-
-        public void ExecuteCommand(Player player)
-        {
-            _Command?.Invoke(player, _valueCard);
-        }
+        
     }
 }
