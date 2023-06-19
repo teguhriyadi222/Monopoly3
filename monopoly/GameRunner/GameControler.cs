@@ -1,4 +1,5 @@
-
+using System.Threading;
+using System.Threading.Tasks;
 namespace monopoly
 {
     public class GameController
@@ -261,9 +262,7 @@ namespace monopoly
 
                     if (_playerMoney.ContainsKey(player))
                     {
-                        _playerMoney[player] += propertyPrice; // Tambahkan uang langsung ke dictionary playerMoney
-
-                        // Hapus properti dari daftar properti pemain
+                        _playerMoney[player] += propertyPrice; 
                         properties.Remove(property);
                         property.SetOwner(null);
                     }
@@ -315,19 +314,6 @@ namespace monopoly
             GoToJailEvent?.Invoke(player);
         }
 
-        public Jail GetJail()
-        {
-            for (int i = 0; i < _board.GetSquaresCount(); i++)
-            {
-                Square square = _board.GetSquare(i);
-                if (square is Jail jail)
-                {
-                    return jail;
-                }
-            }
-
-            return null;
-        }
 
         public bool IsPlayerInJail(Player player)
         {
@@ -494,6 +480,7 @@ namespace monopoly
             }
             else
             {
+
                 return;
             }
 
@@ -502,6 +489,19 @@ namespace monopoly
             Card card = cardList[index];
 
             ExecuteCommand(player, card);
+        }
+
+        public Jail GetJail()
+        {
+            for (int i = 0; i < _board.GetSquaresCount(); i++)
+            {
+                Square square = _board.GetSquare(i);
+                if (square is Jail jail)
+                {
+                    return jail;
+                }
+            }
+            return null;
         }
 
 

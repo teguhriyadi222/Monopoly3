@@ -58,3 +58,18 @@ C:\Users\ASUS\Documents\Monopoly3\monopoly\obj\Debug\net7.0\refint\monopoly.dll
 C:\Users\ASUS\Documents\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.pdb
 C:\Users\ASUS\Documents\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.genruntimeconfig.cache
 C:\Users\ASUS\Documents\Monopoly3\monopoly\obj\Debug\net7.0\ref\monopoly.dll
+C:\Users\Batch 2\Music\Monopoly3\monopoly\bin\Debug\net7.0\monopoly.exe
+C:\Users\Batch 2\Music\Monopoly3\monopoly\bin\Debug\net7.0\monopoly.deps.json
+C:\Users\Batch 2\Music\Monopoly3\monopoly\bin\Debug\net7.0\monopoly.runtimeconfig.json
+C:\Users\Batch 2\Music\Monopoly3\monopoly\bin\Debug\net7.0\monopoly.dll
+C:\Users\Batch 2\Music\Monopoly3\monopoly\bin\Debug\net7.0\monopoly.pdb
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.csproj.AssemblyReference.cache
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.AssemblyInfoInputs.cache
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.AssemblyInfo.cs
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.csproj.CoreCompileInputs.cache
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.dll
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\refint\monopoly.dll
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.pdb
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\monopoly.genruntimeconfig.cache
+C:\Users\Batch 2\Music\Monopoly3\monopoly\obj\Debug\net7.0\ref\monopoly.dll
