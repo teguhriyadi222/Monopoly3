@@ -75,7 +75,18 @@ namespace monopoly
             {
                 Console.Write("Masukkan nama pemain ke-{0}: ", i + 1);
                 string namaPemain = Console.ReadLine();
-                gameController.AddPlayer(namaPemain);
+
+                if (!string.IsNullOrEmpty(namaPemain))
+                {
+                     gameController.AddPlayer(namaPemain);
+                }
+                else 
+                {
+                    Console.WriteLine("inputan tidak valid");
+                    i--;
+                }
+                
+               
             }
             Console.WriteLine("tekan enter untuk memulai permain");
             Console.ReadKey();

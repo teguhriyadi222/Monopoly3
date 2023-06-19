@@ -34,13 +34,15 @@ namespace monopoly
             _jailStatus = new Dictionary<Player, bool>();
         }
 
-        public void AddPlayer(string name)
+        public bool AddPlayer(string name)
         {
-            Player player = new Player(name);
-            _players.Add(player);
-            _playerProperties[player] = new List<Property>();
-            _playerMoney[player] = 20000;
-            _jailStatus[player] = false;
+
+                 Player player = new Player(name);
+                _players.Add(player);
+                _playerProperties[player] = new List<Property>();
+                _playerMoney[player] = 20000;
+                _jailStatus[player] = false;
+                return true;        
         }
 
         public void CreateBoard(IBoard board)
