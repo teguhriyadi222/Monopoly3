@@ -36,14 +36,21 @@ namespace monopoly
 
         public bool AddPlayer(string name)
         {
+            Player existingPlayer = _players.FirstOrDefault(p => p.GetName() == name);
+            if (existingPlayer != null)
+            {
+                return false;
+            }
 
-                 Player player = new Player(name);
-                _players.Add(player);
-                _playerProperties[player] = new List<Property>();
-                _playerMoney[player] = 20000;
-                _jailStatus[player] = false;
-                return true;        
+            Player player = new Player(name);
+            _players.Add(player);
+            _playerProperties[player] = new List<Property>();
+            _playerMoney[player] = 20000;
+            _jailStatus[player] = false;
+            return true;
         }
+
+
 
         public void CreateBoard(IBoard board)
         {
@@ -160,8 +167,7 @@ namespace monopoly
             }
             else if (square is Card card)
             {
-                ExecuteCommand(player, card);
-
+                DrawRandomCard(player, card.GetCardType());
             }
             else if (square is GoToJail jail)
             {
@@ -264,7 +270,7 @@ namespace monopoly
 
                     if (_playerMoney.ContainsKey(player))
                     {
-                        _playerMoney[player] += propertyPrice; 
+                        _playerMoney[player] += propertyPrice;
                         properties.Remove(property);
                         property.SetOwner(null);
                     }
@@ -447,7 +453,6 @@ namespace monopoly
                     _playerMoney[player] += valueCard;
                     break;
             }
-
         }
 
         public void AddCard(Card card)
@@ -468,7 +473,7 @@ namespace monopoly
             }
         }
 
-        public void DrawRandomCard(Player player, TypeCard cardType)
+        public Card DrawRandomCard(Player player, TypeCard cardType)
         {
             List<Card> cardList;
 
@@ -482,8 +487,7 @@ namespace monopoly
             }
             else
             {
-
-                return;
+                return null;
             }
 
             Random random = new Random();
@@ -491,6 +495,7 @@ namespace monopoly
             Card card = cardList[index];
 
             ExecuteCommand(player, card);
+            return card;
         }
 
         public Jail GetJail()

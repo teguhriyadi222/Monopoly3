@@ -53,42 +53,42 @@ namespace monopoly
             board.AddSquare(new Property(29, "Ungaran", "Description 6", 300, 50, 30, 20, TypeProperty.Residential));
             board.AddSquare(new GoToJail(30, "GoToJail", "Description"));
             Console.Clear();
-            Console.WriteLine("=================SELMAT DATANG DI GAME MOOPOLY=======================");
-            Console.Write("Masukkan jumlah pemain: ");
-            int jumlahPemain = 0;
+            Console.WriteLine("=================WELCOME TO MOOPOLY GAME=======================");
+            Console.Write("Enter the number of players: ");
+            int numberOfPlayers = 0;
             bool inputValid = false;
             while (!inputValid)
             {
-                if (int.TryParse(Console.ReadLine(), out jumlahPemain) && jumlahPemain > 0)
+                if (int.TryParse(Console.ReadLine(), out numberOfPlayers) && numberOfPlayers > 0)
                 {
                     inputValid = true;
                 }
                 else
                 {
-                    Console.WriteLine("Input tidak valid. Masukkan jumlah pemain yang benar!!!.");
-                    Console.Write("Masukkan jumlah pemain: ");
+                    Console.WriteLine("Invalid input. Please enter a valid number of players.");
+                    Console.Write("Enter the number of players: ");
                 }
             }
 
-            // Menambahkan pemainrxxxxxxxxxxxxm
-            for (int i = 0; i < jumlahPemain; i++)
+            // Adding players
+            for (int i = 0; i < numberOfPlayers; i++)
             {
-                Console.Write("Masukkan nama pemain ke-{0}: ", i + 1);
-                string namaPemain = Console.ReadLine();
+                Console.Write("Enter the name of player {0}: ", i + 1);
+                string playerName = Console.ReadLine();
 
-                if (!string.IsNullOrEmpty(namaPemain))
+                if (!string.IsNullOrEmpty(playerName))
                 {
-                     gameController.AddPlayer(namaPemain);
+                    gameController.AddPlayer(playerName);
                 }
-                else 
+                else
                 {
-                    Console.WriteLine("inputan tidak valid");
+                    Console.WriteLine("Invalid input");
                     i--;
                 }
-                
-               
             }
-            Console.WriteLine("tekan enter untuk memulai permain");
+
+            Console.WriteLine("Press enter to start the game");
+
             Console.ReadKey();
             gameController.StartGame();
 
@@ -100,8 +100,8 @@ namespace monopoly
                 Player activePlayer = gameController.GetActivePlayer();
 
                 Console.Clear();
-                Console.WriteLine("Giliran pemain: " + activePlayer.GetName());
-                Console.WriteLine("tekan enter untuk Roll Dadu");
+                onsole.WriteLine("Player's Turn: " + activePlayer.GetName());
+                Console.WriteLine("Press enter to Roll the Dice");
                 Console.ReadKey();
                 // Melempar dadu
                 (int dice1Result, int dice2Result, int totalResult) = gameController.RollDice();
@@ -114,7 +114,6 @@ namespace monopoly
                 Console.Clear();
                 // Memindahkan pemain
                 gameController.Move(activePlayer, totalResult);
-
                 // Mendapatkan posisi pemain setelah pergerakan
                 int playerPosition = gameController.GetPlayerPosition(activePlayer);
 
@@ -271,68 +270,4 @@ namespace monopoly
         }
     }
 }
-
-
-// namespace monopoly
-// {
-//     public class Program
-//     {
-//         public static void Main(string[] args)
-//         {
-//             Jail jail = new Jail(10, "Jail", "Jail square", 70);
-//             // Membuat objek GameController dan objek Board
-//             List<Player> players = new List<Player>();  // Inisialisasi daftar pemain
-//             GameController gameController = new GameController(players, new Board(), jail,  new List<Card>(), new List<Card>(), new Dice());
-//             gameController.GoToJailEvent += HandleGoToJailEvent;
-//             Board board = new Board();
-
-//             // Membuat objek Player
-//             Player player = new Player("John");
-//             string player1 = "teguh";
-//             string player2 ="yuli";
-
-//             // Menambahkan Player dan Board ke GameController
-//             gameController.AddPlayer(player1);
-
-//             gameController.CreateBoard(board);
-//             Player activePlayer = gameController.GetActivePlayer();
-
-//             // Membuat objek Tax didalam board
-//             // Property prop = new Property(1, "Salatiga", "Description 1", 100, 50, 30, 20, TypeProperty.Residential);
-
-//             Tax tax = new Tax(1, "Tax 3", "kamu harus membayar: Rp.300", 300);
-//             // GoToJail jailx = new GoToJail(1,"go to jail", "anda masuk penjara");
-//             board.AddSquare(tax);
-//             // board.AddSquare(jail);
-//             // board.AddSquare(prop);
-
-//             // gameController.HandleSquareAction(activePlayer, tax);
-//             // gameController.BuyProperty(activePlayer, jailx);
-
-//             // gameController.NextTurn();
-//             int moneyBeforeTax = gameController.GetPlayerMoney(activePlayer);
-
-//             int playerPosition = gameController.GetPlayerPosition(activePlayer);
-//             // Console.WriteLine("Player Position: " + playerPosition);
-
-//             // Mencetak jumlah uang player sebelum membayar tax
-//             // int moneyBeforeTax = gameController.GetPlayerMoney(activePlayer);
-//             Console.WriteLine("Player's money before tax: $" + moneyBeforeTax);
-
-//             // // Menghandle aksi saat berada di properti tax
-//             gameController.HandleSquareAction(activePlayer, tax);
-
-//             // // Mencetak jumlah uang player setelah membayar tax
-//             // int moneyAfterTax = gameController.GetPlayerMoney(activePlayer);
-//             Console.WriteLine("Player's money after tax: $" + moneyBeforeTax);
-
-//             static void HandleGoToJailEvent(Player player)
-//             { 
-//                 Console.WriteLine($"{player.GetName()} has been sent to jail."); 
-//             }
-//         }
-//     }
-// }
-
-
 
